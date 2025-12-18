@@ -1,0 +1,8 @@
+{
+    "base_url": "https://test.orangehrm.com",
+    "username": "",
+    "password": "",
+    "client_id": "test_client",
+    "client_secret": "5---",
+    "type": "client_credentials"
+}
