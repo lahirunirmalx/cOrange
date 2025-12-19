@@ -7,8 +7,9 @@ C implementation of the OrangeHRM API Client
 
 ## Features
 
-* **Feature 1**: token generation.
-* **Feature 2**: Rest method implemented. 
+* **Feature 1**: Token generation.
+* **Feature 2**: Rest method implemented.
+* **Feature 3**: Demo GUI Application for Attendance Punch in punch out   
 
 ## Requirements
 
@@ -24,7 +25,7 @@ Use the following commands to install the necessary dependencies (for example, o
 
 ```bash
 sudo apt update
-sudo apt install libcurl4-openssl-dev libjson-c-dev
+sudo apt install libcurl4-openssl-dev libjson-c-dev libgtk-3-dev
 ```
 
 ## Getting Started
