@@ -13,7 +13,6 @@ GtkWidget *time_label;
 Config config;
 
 void write_log(const char *message) {
-    // Opens the log file in append mode, adds the timestamp and message, and then closes the file.
     FILE *log_file = fopen("application.log", "a");
     if (log_file == NULL) {
         fprintf(stderr, "Error opening log file\n");
@@ -135,6 +134,8 @@ gboolean update_time_label(gpointer data) {
 
 void on_start_button_clicked(GtkWidget *widget, gpointer data) {
     gtk_widget_set_sensitive(widget, FALSE); // Disable the start button
+    GtkWidget *stop_button = GTK_WIDGET(data);
+    gtk_widget_set_sensitive(stop_button, TRUE); // Enable the stop button
     time(&start_time);
     timer_id = g_timeout_add(1000, update_time_label, NULL);  // 1000 ms = 1 second
 }
@@ -152,8 +153,9 @@ void on_stop_button_clicked(GtkWidget *widget, gpointer data) {
     gtk_label_set_text(GTK_LABEL(time_label), formatted_time);
 
     GtkWidget *start_button = GTK_WIDGET(data);  // Retrieve the start button
-    gtk_widget_set_sensitive(start_button, TRUE);  // Enable the start button again
-
+    gtk_widget_set_sensitive(start_button, TRUE);  // Re-enable the start button
+    gtk_widget_set_sensitive(widget, FALSE);
+    
     time_t *times = (time_t*)malloc(2 * sizeof(time_t));
     times[0] = start_time;
     times[1] = stop_time;
@@ -169,13 +171,14 @@ void on_stop_button_clicked(GtkWidget *widget, gpointer data) {
 void create_overlay_window() {
     GtkWidget *window;
     GtkWidget *box;
+    GtkWidget *button_box;
     GtkWidget *start_button, *stop_button;
     
     gtk_init(NULL, NULL);
     
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(window), "cOrange Timer");
-    gtk_window_set_default_size(GTK_WINDOW(window), 300, 150);
+    gtk_window_set_default_size(GTK_WINDOW(window), 250, 60); // Smaller window size
     gtk_window_set_keep_above(GTK_WINDOW(window), TRUE);
 
     g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
@@ -193,14 +196,21 @@ void create_overlay_window() {
                                    GTK_STYLE_PROVIDER(provider), GTK_STYLE_PROVIDER_PRIORITY_USER);
     g_object_unref(provider);
     
+    button_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);  // Horizontal box for buttons
+    gtk_box_pack_start(GTK_BOX(box), button_box, TRUE, TRUE, 0);
+    
     start_button = gtk_button_new_with_label("Start");
     stop_button = gtk_button_new_with_label("Stop");
+
+    gtk_widget_set_sensitive(stop_button, FALSE); // Disable stop button initially
     
-    gtk_box_pack_start(GTK_BOX(box), start_button, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(box), stop_button, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(button_box), start_button, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(button_box), stop_button, TRUE, TRUE, 0);
     
-    g_signal_connect(start_button, "clicked", G_CALLBACK(on_start_button_clicked), NULL);
+    g_signal_connect(start_button, "clicked", G_CALLBACK(on_start_button_clicked), stop_button);
     g_signal_connect(stop_button, "clicked", G_CALLBACK(on_stop_button_clicked), start_button);
+    
+     gtk_widget_set_sensitive(stop_button, FALSE);
     
     gtk_widget_show_all(window);
 }
