@@ -83,7 +83,8 @@ The application uses a `config.json` file for configuration. Below is an example
     "base_url": "https://api.example.com",
     "access_token": "your_access_token",
     "client_id": "your_client_id",
-    "client_secret": "your_client_secret"
+    "client_secret": "your_client_secret",
+    "username": "your_employee number"
 }
 ```
 
