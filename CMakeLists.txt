@@ -24,13 +24,18 @@ if (NOT JSON_C_FOUND)
     endif()
 endif()
 
-# Include directories for CURL and json-c
-include_directories(${CURL_INCLUDE_DIRS} ${JSON_C_INCLUDE_DIRS})
+# Try to find GTK+ 3.0 using pkg-config
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
+
+# Include directories for CURL, json-c, and GTK
+include_directories(${CURL_INCLUDE_DIRS} ${JSON_C_INCLUDE_DIRS} ${GTK3_INCLUDE_DIRS})
 
 # Add executable
 add_executable(orangehrm_client main.c orangehrm_client.c)
 
-# Link libraries (CURL and json-c)
-target_link_libraries(orangehrm_client ${CURL_LIBRARIES} ${JSON_C_LIBRARIES})
+# Link libraries (CURL, json-c, pthread and GTK)
+target_link_libraries(orangehrm_client ${CURL_LIBRARIES} ${JSON_C_LIBRARIES} ${GTK3_LIBRARIES} pthread)
+
 # Copy config.json to the build folder
 file(COPY ${CMAKE_SOURCE_DIR}/config.json DESTINATION ${CMAKE_BINARY_DIR})
