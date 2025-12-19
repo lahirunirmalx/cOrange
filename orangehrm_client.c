@@ -172,7 +172,7 @@ int api_request(const char *url, const char *method, const char *data, Config *c
 
         if (data != NULL) {
             curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data);
-            headers = curl_slist_append(headers, "Content-Type: application/x-www-form-urlencoded");
+            headers = curl_slist_append(headers, "Content-Type: application/json");
         }
 
         if (strcmp(method, "GET") == 0) {
