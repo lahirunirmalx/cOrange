@@ -39,3 +39,10 @@ target_link_libraries(orangehrm_client ${CURL_LIBRARIES} ${JSON_C_LIBRARIES} ${G
 
 # Copy config.json to the build folder
 file(COPY ${CMAKE_SOURCE_DIR}/config.json DESTINATION ${CMAKE_BINARY_DIR})
+
+# Create assets directory in build folder
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/assets)
+
+# Copy icon.png to build/assets/icon.png
+file(COPY ${CMAKE_SOURCE_DIR}/assets/icon.png
+     DESTINATION ${CMAKE_BINARY_DIR}/assets)

@@ -7,10 +7,25 @@
 #include <string.h>
 #include <json-c/json.h>
 
+
+#define APP_ICON_PATH "assets/icon.png"
+
+
 time_t start_time, stop_time;
 guint timer_id; // Timer identifier
 GtkWidget *time_label;
 Config config;
+
+static void set_window_icon(GtkWindow *win, const char *icon_path) {
+    GError *err = NULL;
+
+    gtk_window_set_icon_from_file(win, icon_path, &err);
+
+    if (err) {
+        g_printerr("Failed to set icon (%s): %s\n", icon_path, err->message);
+        g_error_free(err);
+    }
+}
 
 void write_log(const char *message) {
     FILE *log_file = fopen("application.log", "a");
@@ -177,6 +192,7 @@ void create_overlay_window() {
     gtk_init(NULL, NULL);
     
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    set_window_icon(GTK_WINDOW(window),APP_ICON_PATH);
     gtk_window_set_title(GTK_WINDOW(window), "cOrange Timer");
     gtk_window_set_default_size(GTK_WINDOW(window), 250, 60); // Smaller window size
     gtk_window_set_keep_above(GTK_WINDOW(window), TRUE);
